@@ -100,8 +100,10 @@ SAVE MYSQL USERS TO DISK;
 ## checking topology to veirfy proper shard routing
 its highly important to use the -c on the mysql client so comments wont be ignored.
 
+in order to get product from shard1:
 mysql -c -h 127.0.0.1 -P 6033 -u mysqluser -pmysqlpw -e 'select /* exec_on_shard_1 */ * from sample.products;'
 
+in order to get product from shard2:
 mysql -c -h 127.0.0.1 -P 6033 -u mysqluser -pmysqlpw -e 'select /* exec_on_shard_2 */ * from sample.products;'
 
 
