@@ -13,8 +13,6 @@ services:
     image: mysql
     ports:
      - 3307:3306
-    build:
-      context: mysql1
     environment:
      - MYSQL_ROOT_PASSWORD=password
      - MYSQL_USER=mysqluser
@@ -24,8 +22,6 @@ services:
     image: mysql
     ports:
      - 3308:3306
-    build:
-      context: mysql2
     environment:
      - MYSQL_ROOT_PASSWORD=password
      - MYSQL_USER=mysqluser
