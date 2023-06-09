@@ -19,74 +19,11 @@ in order to start the env
 ```
 docker-compose up
 ```
-
-
-## setting up a schema
-The sql databases will have a pre made schema name "sample"
-
-the following sql code needs to be executed on mysql 1
-connecting to server :
-for the first server sql port is mapped to ***3307***
-mysql -h 127.0.0.1 -P 3307 -u root -ppassword
-
-```sql
-CREATE TABLE products (
-  id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  description VARCHAR(512),
-  tenant VARCHAR(512)
-);
-ALTER TABLE products AUTO_INCREMENT = 101;
-
-INSERT INTO products
-VALUES (default,"scooter","Small 2-wheel scooter",'ace5d454-5aca-4ea7-8620-21f1cf0c5f8f'),
-       (default,"car battery","12V car battery",'ace5d454-5aca-4ea7-8620-21f1cf0c5f8f'),
-       (default,"12-pack drill bits","12-pack of drill bits with sizes ranging from #40 to #3",'ace5d454-5aca-4ea7-8620-21f1cf0c5f8f')
-
-
-#creating monitoring user for proxy sql
-CREATE USER 'proxysql'@'%' IDENTIFIED WITH mysql_native_password by '$3Kr$t';
-
-GRANT USAGE ON *.* TO 'proxysql'@'%';
-FLUSH privileges;
-
-```
-
-the following sql code needs to be executed on mysql 2
-
-connecting to server:
-for the first server sql port is mapped to ***3308***
-
-mysql -h 127.0.0.1 -P 3308 -u root -ppassword
-
-```sql
-# Switch to this database
-USE sample;
-
-# Create and populate our products using a single insert with many rows
-CREATE TABLE products (
-  id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  description VARCHAR(512),
-  tenant VARCHAR(512)
-);
-ALTER TABLE products AUTO_INCREMENT = 201;
-
-  INSERT INTO products
-  VALUES (default,"bike","just a bike",'fca30520-c932-4d33-b028-968d00cc5eb0'),
-         (default,"pc","nice pc",'fca30520-c932-4d33-b028-968d00cc5eb0'),
-         (default,"table","table",'fca30520-c932-4d33-b028-968d00cc5eb0')
-
-#creating monitoring user for proxy sql
-CREATE USER 'proxysql'@'%' IDENTIFIED WITH mysql_native_password by '$3Kr$t';
-
-GRANT USAGE ON *.* TO 'proxysql'@'%';
-FLUSH privileges;
-```
-
 # setting up proxysql
 connecting to proxy sql
 ```
+docker exec -it proxysql bash
+
 mysql -h 127.0.0.1 -P 6033 -u proxysqluser -pproxysqlpwd
 ```
 configuring proxy sql:
