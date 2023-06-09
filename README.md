@@ -54,6 +54,9 @@ in order to start the env
 docker-compose up -d
 ```
 # setting up proxysql
+proxy sql will be configured in a way that every sql statment with a comment "exec_on_shard_1" wii be routed to shard 1(mysql1)
+and every sql statement with a comment "exec_on_shard_2" will be routed to shard 2(mysql2)
+
 connecting to proxy sql
 ```
 docker exec -it proxysql bash -c 'mysql -u admin -padmin -h 127.0.0.1 -P 6032'
@@ -103,10 +106,8 @@ mysql -c -h 127.0.0.1 -P 6033 -u mysqluser -pmysqlpw -e 'select /* exec_on_shard
 
 
 
-##stopping env:
+## Stopping env:
 docker-compose down
-
-
 
 -------
 
