@@ -12,12 +12,46 @@ once a shard is being resolved,  a sharding hint will be added as a comment to e
 - mysql client
 
 ### compose file 
-the docker compose file includes proxy sql server and 2 mysql servers.
-the servers are  isolated and dont know about the existence of the other.
+the docker compose file includes proxy sql server and 2 mysql servers
+the servers are isolated and dont know about the existence of the other.
+the scripts folder include startup scripts for both servers:
+
+both the mysql1 script and the mysql2 scirpts creates the same product table on each database as the 
+destined to function as shard to the same logical database
+table schema:
+```sql
+CREATE TABLE products (
+  id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(512),
+  tenant VARCHAR(512)
+);
+```
+
+in addition the startup script insert unique products to each server.
+mysql1 products:
+```sql
+INSERT INTO products
+VALUES (default,"scooter","Small 2-wheel scooter",'ace5d454-5aca-4ea7-8620-21f1cf0c5f8f'),
+       (default,"car battery","12V car battery",'ace5d454-5aca-4ea7-8620-21f1cf0c5f8f'),
+       (default,"12-pack drill bits","12-pack of drill bits with sizes ranging from #40 to #3",'ace5d454-5aca-4ea7-8620-21f1cf0c5f8f')
+```
+
+mysql 2 products:
+```sql
+  INSERT INTO products
+  VALUES (default,"bike","just a bike",'fca30520-c932-4d33-b028-968d00cc5eb0'),
+         (default,"pc","nice pc",'fca30520-c932-4d33-b028-968d00cc5eb0'),
+         (default,"table","table",'fca30520-c932-4d33-b028-968d00cc5eb0')
+
+```
+
+
+##starting the env
 
 in order to start the env
 ```
-docker-compose up
+docker-compose up -d
 ```
 # setting up proxysql
 connecting to proxy sql
@@ -60,7 +94,7 @@ LOAD MYSQL USERS TO RUNTIME;
 SAVE MYSQL USERS TO DISK;
 ```
 
-## checking topology
+## checking topology to veirfy proper shard routing
 its highly important to use the -c on the mysql client so comments wont be ignored.
 
 mysql -c -h 127.0.0.1 -P 6033 -u mysqluser -pmysqlpw -e 'select /* exec_on_shard_1 */ * from sample.products;'
@@ -69,7 +103,8 @@ mysql -c -h 127.0.0.1 -P 6033 -u mysqluser -pmysqlpw -e 'select /* exec_on_shard
 
 
 
-
+##stopping env:
+docker-compose down
 
 
 
