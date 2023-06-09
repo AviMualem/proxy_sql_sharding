@@ -22,9 +22,7 @@ docker-compose up
 # setting up proxysql
 connecting to proxy sql
 ```
-docker exec -it proxysql bash
-
-mysql -h 127.0.0.1 -P 6033 -u proxysqluser -pproxysqlpwd
+docker exec -it proxysql bash -c 'mysql -u admin -padmin -h 127.0.0.1 -P 6032'
 ```
 configuring proxy sql:
 ```
