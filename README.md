@@ -97,7 +97,7 @@ LOAD MYSQL USERS TO RUNTIME;
 SAVE MYSQL USERS TO DISK;
 ```
 
-## checking topology to veirfy proper shard routing
+## checking topology to verify proper shard routing
 its highly important to use the -c on the mysql client so comments wont be ignored.
 
 in order to get product from shard1:
